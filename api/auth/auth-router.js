@@ -10,12 +10,14 @@ const { jwtSecret } = require("../../config/secrets")
 // Bring in Users model
 const Users = require('../users/users-model')
 
+// Bring in Middleware
+const { checkPayload } = require("./auth-middleware")
 
 
 const router = require('express').Router();
 
-router.post('/register', (req, res, next) => {
-  res.end('implement register, please!');
+router.post('/register', checkPayload, (req, res, next) => {
+  // res.end('implement register, please!');
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -48,14 +50,16 @@ router.post('/register', (req, res, next) => {
   const hash = bcrypt.hashSync(user.password, rounds)
 
   user.password = hash
-  
+  console.log(user)
   Users.add(user)
       .then(saved => {
         res.status(201).json({ message: `Great to have you ${saved.username}` })
       })
       .catch(next);
 
+  console.log(user)
 });
+
 
 router.post('/login', (req, res) => {
   res.end('implement login, please!');

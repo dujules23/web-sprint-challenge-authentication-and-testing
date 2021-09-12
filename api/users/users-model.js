@@ -7,12 +7,12 @@ function find() {
 
 function findBy(filter) {
   return db("users")
-  .select("username", "password")
+  .select("id", "username", "password")
   .where(filter)
 }
 
 async function add(user) {
-  const [id] = await db("users").insert(user):
+  const [id] = await db("users").insert(user);
   return findById(id);
 }
 
