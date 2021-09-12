@@ -11,12 +11,12 @@ const { jwtSecret } = require("../../config/secrets")
 const Users = require('../users/users-model')
 
 // Bring in Middleware
-const { checkPayload } = require("./auth-middleware")
+const { checkPayload, checkIfUserExists } = require("./auth-middleware")
 
 
 const router = require('express').Router();
 
-router.post('/register', checkPayload, (req, res, next) => {
+router.post('/register', checkPayload, checkIfUserExists, (req, res, next) => {
   // res.end('implement register, please!');
   /*
     IMPLEMENT
