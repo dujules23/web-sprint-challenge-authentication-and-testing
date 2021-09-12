@@ -1,6 +1,17 @@
+// Bring in bcrypt
+const bcyrpt = require('bcryptjs');
+
+// bring in json web token
+const jwt = require("jsonwebtoken")
+
+// bring in secret
+const { jwtSecret } = require("../../config/secrets")
+
+
+
 const router = require('express').Router();
 
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
   res.end('implement register, please!');
   /*
     IMPLEMENT
