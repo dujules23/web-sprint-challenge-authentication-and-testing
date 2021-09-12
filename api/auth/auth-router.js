@@ -1,11 +1,14 @@
 // Bring in bcrypt
-const bcyrpt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 // bring in json web token
 const jwt = require("jsonwebtoken")
 
 // bring in secret
 const { jwtSecret } = require("../../config/secrets")
+
+// Bring in Users model
+const Users = require('../users/users-model')
 
 
 
@@ -38,6 +41,20 @@ router.post('/register', (req, res, next) => {
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
+  let user = req.body;
+
+  const rounds = process.env.BCRYPT_ROUNDS || 8
+
+  const hash = bcrypt.hashSync(user.password, rounds)
+
+  user.password = hash
+  
+  Users.add(user)
+      .then(saved => {
+        res.status(201).json({ message: `Great to have you ${saved.username}` })
+      })
+      .catch(next);
+
 });
 
 router.post('/login', (req, res) => {
