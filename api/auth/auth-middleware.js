@@ -13,7 +13,7 @@ const checkPayload = (req, res, next) => {
 }
 
 // checks to see if user has already been added to the database
-const checkIfUserExists = async (req, res, next) => {
+const checkIfUserIsInDb = async (req, res, next) => {
   try{
     const rows = await Users.findBy({username: req.body.username})
 
@@ -31,7 +31,26 @@ const checkIfUserExists = async (req, res, next) => {
   }
 }
 
+const checkIfUserExists = async (req, res, next) => {
+  try{
+    const rows = await Users.findBy({username: req.body.username})
+
+    if(rows.length) {
+      req.userData = rows[0]
+
+      next()
+    }
+    else{
+      res.status(401).json("invalid credentials")
+    }
+  }
+  catch(e){
+    res.status(500).json(`Server error ${e}`)
+  }
+}
+
 module.exports = {
   checkPayload,
+  checkIfUserIsInDb,
   checkIfUserExists
 }
